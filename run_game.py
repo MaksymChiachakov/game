@@ -1,5 +1,6 @@
 import pygame 
 import subprocess
+import webbrowser 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE
 
 pygame.init()
@@ -65,6 +66,11 @@ sett_1 = Picture('img/for menu/1.png', 70, 200, 100, 100)
 sett_2 = Picture('img/for menu/2.png', 200, 200, 100, 100)
 sett_3 = Picture('img/for menu/3.png', 330, 200, 100, 100)
 
+# Відкриття документації у браузері
+def open_documentary():
+    docs_path = 'github.com/MaksymChiachakov/project/blob/main/docs/documentary.md'
+    documentary = 'https://{}'.format(docs_path)
+    webbrowser.open(documentary)    
 
 # Створення функцій для запускання ігор
 def run_game1():
@@ -125,6 +131,8 @@ while True:
                 x, y = event.pos
                 if sett_back.rect.collidepoint(x, y):
                     screen = 'menu'
+                if sett_documentary.rect.collidepoint(x, y):
+                    open_documentary()
             if event.type == pygame.QUIT:
                 pygame.quit()
 
