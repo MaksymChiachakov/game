@@ -9,7 +9,8 @@ w = pygame.display.set_mode((500, 500))
 w.fill((230, 230, 250))
 clock = pygame.time.Clock()
 
-# Клас поря
+
+# Клас поля
 class Area():
     def __init__(self, x=0, y=0, width=10, height=10, color=None):
         self.rect = pygame.Rect(x, y, width, height)
@@ -23,6 +24,7 @@ class Area():
     def fill(self):
         pygame.draw.rect(w, self.fill_color, self.rect)
 
+
 # Клас зображень
 class Picture(Area):
     def __init__(self, filename, x, y, width=10, height=10, color=None):
@@ -32,6 +34,7 @@ class Picture(Area):
 
     def draw_picture(self):
         w.blit(self.image, (self.rect.x, self.rect.y))
+
 
 # Клас надписів 
 class Label(Area):
@@ -43,28 +46,28 @@ class Label(Area):
         w.blit(self.image, (self.rect.x + shift_x, self.rect.y + shift_y))
 
 
-# Створення об'єктів для екрану меню
+# Створення об'єктів для головного меню
 menu_start = Picture('img/for menu/start_button.png', 200, 100, 100, 100)
 menu_exit = Picture('img/for menu/exit_button.png', 220, 370, 50, 50)
 menu_settings = Picture('img/for menu/settings_button.png', 20, 20, 50, 50)
 
-# Створення об'єктів для екрану меню
+# Створення об'єктів для меню настройок
 sett_info = Label(25, 50, 100, 150)
 sett_info.set_text('Щоб почати гру - натисніть кнопку "Start"')
 sett_back = Picture('img/for menu/return_button.png', 230, 370, 50, 50)
 
-# Створення об'єктів для екрану гри
+# Створення об'єктів для меню гри
 play_info = Label(25, 50, 100, 150)
 play_info.set_text('Щоб почати гру - виберіть 1 з 3-х:')
 sett_1 = Picture('img/for menu/1.png', 70, 200, 100, 100)
 sett_2 = Picture('img/for menu/2.png', 200, 200, 100, 100)
 sett_3 = Picture('img/for menu/3.png', 330, 200, 100, 100)
 
+
 # Створення функцій для запускання ігор
 def run_game1():
     # Вказати шлях до файлу, який потрібно запустити
     game_file_path = 'Доганялки/main.py'
-
     # Запустити файл game_file_path у новому процесі Python
     try:
         subprocess.run(['python', game_file_path])
@@ -73,7 +76,6 @@ def run_game1():
 
 def run_game2():
     game_file_path = 'Лабіринт/main.py'
-
     try:
         subprocess.run(['python', game_file_path])
     except FileNotFoundError:
@@ -81,11 +83,11 @@ def run_game2():
 
 def run_game3():
     game_file_path = 'Пригоди/main.py'
-
     try:
         subprocess.run(['python', game_file_path])
     except FileNotFoundError:
         print(f"Файл '{game_file_path}' не знайдено.")
+
 
 # Ігровий цикл з меню
 screen = 'menu'
