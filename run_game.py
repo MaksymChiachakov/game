@@ -51,14 +51,16 @@ menu_start = Picture('img/for menu/start_button.png', 200, 100, 100, 100)
 menu_exit = Picture('img/for menu/exit_button.png', 220, 370, 50, 50)
 menu_settings = Picture('img/for menu/settings_button.png', 20, 20, 50, 50)
 
+
 # Створення об'єктів для меню настройок
 sett_info = Label(25, 50, 100, 150)
-sett_info.set_text('Щоб почати гру - натисніть кнопку "Start"')
+sett_info.set_text('Щоб почати гру - натисніть кнопку "Start".\n Після нажимання, ви повинні будете вибрати одну з 3-х запропоновах вам ігор')
 sett_back = Picture('img/for menu/return_button.png', 230, 370, 50, 50)
+sett_documentary = Picture('img/for menu/documentary.png', 435, 430, 50, 50)
 
 # Створення об'єктів для меню гри
 play_info = Label(25, 50, 100, 150)
-play_info.set_text('Щоб почати гру - виберіть 1 з 3-х:')
+play_info.set_text('Щоб почати гру - виберіть 1 з 3-х ігор запропонованих нами:')
 sett_1 = Picture('img/for menu/1.png', 70, 200, 100, 100)
 sett_2 = Picture('img/for menu/2.png', 200, 200, 100, 100)
 sett_3 = Picture('img/for menu/3.png', 330, 200, 100, 100)
@@ -116,6 +118,7 @@ while True:
     elif screen == 'settings':
         sett_info.draw_text()
         sett_back.draw_picture()
+        sett_documentary.draw_picture()
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
