@@ -1,10 +1,12 @@
 import pygame 
-import subprocess
+from pygame import font
+import subprocess, os
 import webbrowser 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE
+from db import delete_catch_score
+#import tkinter as tk
 
 pygame.init()
-
 # Задання властивостей нашому додатку
 w = pygame.display.set_mode((500, 500))
 w.fill((230, 230, 250))
@@ -55,16 +57,27 @@ menu_settings = Picture('img/for menu/settings_button.png', 20, 20, 50, 50)
 
 # Створення об'єктів для меню настройок
 sett_info = Label(25, 50, 100, 150)
-sett_info.set_text('Щоб почати гру - натисніть кнопку "Start".\n Після нажимання, ви повинні будете вибрати одну з 3-х запропоновах вам ігор')
+sett_info.set_text('Щоб ознайомитися з грою, нажміть на значок "Файл" знизу праворуч.')
 sett_back = Picture('img/for menu/return_button.png', 230, 370, 50, 50)
 sett_documentary = Picture('img/for menu/documentary.png', 435, 430, 50, 50)
 
 # Створення об'єктів для меню гри
 play_info = Label(25, 50, 100, 150)
-play_info.set_text('Щоб почати гру - виберіть 1 з 3-х ігор запропонованих нами:')
+play_info.set_text('Щоб почати грати - виберіть 1 з 3-х ігор запропонованих нами:')
 sett_1 = Picture('img/for menu/1.png', 70, 200, 100, 100)
 sett_2 = Picture('img/for menu/2.png', 200, 200, 100, 100)
 sett_3 = Picture('img/for menu/3.png', 330, 200, 100, 100)
+sett_4 = Picture('img/for menu/star.png', 420, 420, 70, 70)
+sett4_info = Label(25, 50, 100, 150)
+sett4_info.set_text('Test')
+
+""" font.init()
+text_font = font.Font(None, 40)
+# Показ
+def show_level(text_list):
+    for i in range(len(text_list)):
+        w.blit(text_font.render(
+            text_list[i], 1), (25, ((i+1)*50))) """
 
 # Відкриття документації у браузері
 def open_documentary():
@@ -72,11 +85,14 @@ def open_documentary():
     documentary = 'https://{}'.format(docs_path)
     webbrowser.open(documentary)    
 
+# Відкриваємо текстовий документ
+def open_scores():
+    filename = 'scores.txt'
+    os.startfile(filename)
+
 # Створення функцій для запускання ігор
 def run_game1():
-    # Вказати шлях до файлу, який потрібно запустити
     game_file_path = 'Доганялки/main.py'
-    # Запустити файл game_file_path у новому процесі Python
     try:
         subprocess.run(['python', game_file_path])
     except FileNotFoundError:
@@ -142,6 +158,7 @@ while True:
         sett_1.draw_picture()
         sett_2.draw_picture()
         sett_3.draw_picture()
+        sett_4.draw_picture()
         sett_back.draw_picture()
 
         for event in pygame.event.get():
@@ -157,10 +174,14 @@ while True:
                     screen = 'game_start'
                 if sett_3.rect.collidepoint(x, y):
                     run_game3()
-                    screen = 'game_start'
+                    screen = 'game_start'    
+                if sett_4.rect.collidepoint(x, y):
+                    open_scores()
+
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-                
+      
     clock.tick(40)
     pygame.display.update()
+

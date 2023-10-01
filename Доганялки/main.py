@@ -1,5 +1,19 @@
 import pygame 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_s, K_w, K_d, K_a
+import sys
+import os
+import sqlite3
+# Отримайте поточний шлях
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Додайте шлях до батьківської директорії до шляхів Python
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
+
+# Тепер ви можете імпортувати модуль
+#from db import request_for_DB # Замість "module" тут повинна бути назва вашого модулю
+from db import get_catch, delete_catch_score
+
 
 pygame.init()
 
@@ -13,6 +27,24 @@ color_black = (0, 0, 0)
 
 main_display = pygame.display.set_mode((w, h))
 
+def get_score(score):
+    return score
+
+def push_to_db():
+    first = []
+    first.append(score)
+    data = first.copy()
+
+    int_element = data[0]
+
+    conn = sqlite3.connect('DB.db')
+
+        # cursor - працює з запитами у DB
+    cursor = conn.cursor()
+
+    cursor.execute('''INSERT INTO catch (score) VALUES (?)''', [int_element])
+
+    conn.commit()
 
 bg = pygame.transform.scale(pygame.image.load('img/for catch/background.png'), (w, h))
 bg_X1 = 0
@@ -43,7 +75,11 @@ while playing:
     FPS.tick(120)
     for event in pygame.event.get():
         if event.type == QUIT:
+            push_to_db()
+            get_catch()
+            delete_catch_score()
             playing = False
+            
 
 
     bg_X1 -= bg_move
@@ -84,11 +120,22 @@ while playing:
     if keys[K_a] and pl2_rect.left >= 0:
         pl2_rect = pl2_rect.move(pl2_speed_left)
 
-    if pl2_rect.colliderect(pl1_rect):
+    if pl1_rect.colliderect(pl2_rect) and not collision_detected:
         score += 1
+        collision_detected = True  # Позначаємо зіткнення, щоб не додавати більше очок
 
-    if score == 1500:
+
+    if not pl1_rect.colliderect(pl2_rect):
+        collision_detected = False  # Скидаємо позначку при відсутності зіткнення
+
+    if score == 10:
+        push_to_db()
+        get_catch()
+        delete_catch_score()
         playing = False
+        
+
+
 
 
     main_display.blit(FONT.render(str(score), True, color_black), (w-70, 20))
@@ -96,3 +143,11 @@ while playing:
     main_display.blit(pl2, pl2_rect)
 
     pygame.display.flip()
+
+#i = 0
+#while i == 1:
+    #if playing == False:
+        #get_maze()
+        #i += 1
+
+# Надсилання очок у DB

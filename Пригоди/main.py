@@ -1,8 +1,19 @@
 import pygame 
-import os 
+import os, sys
 from typing import Any
 import random 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE, KEYDOWN, K_F2, K_F3
+import sqlite3
+# Отримайте поточний шлях
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Додайте шлях до батьківської директорії до шляхів Python
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
+
+# Тепер ви можете імпортувати модуль
+#from db import request_for_DB # Замість "module" тут повинна бути назва вашого модулю
+from db import get_sprinter, delete_sprinter_score
 
 pygame.init()
 
@@ -61,6 +72,22 @@ player_speed_right = [4, 0]
 player_speed_left = [-4, 0]
 player_move_up = [0, -4]
 
+# Надсилання очок у DB
+def push_to_db():
+    first = []
+    first.append(score)
+    data = first.copy()
+
+    int_element = data[0]
+
+    conn = sqlite3.connect('DB.db')
+
+    cursor = conn.cursor()
+
+    cursor.execute('''INSERT INTO sprinter (score) VALUES (?)''', [int_element])
+
+    conn.commit()
+
 def create_enemy():
     enemy = pygame.image.load('img/for hack/enemy.png').convert_alpha()
     enemy_rect = pygame.Rect(w, random.randint(enemy.get_height(), h - enemy.get_height()), *enemy.get_size())
@@ -108,7 +135,11 @@ while playing:
 
     for event in pygame.event.get():
         if event.type == QUIT:
+            push_to_db()
+            get_sprinter()
+            delete_sprinter_score()
             playing = False
+            
         if event.type == CREATE_ENEMY:
             enemies.append(create_enemy())
         if event.type == CREATE_BONUS:
@@ -130,7 +161,11 @@ while playing:
                 pygame.mixer.Sound.set_volume(money, volume_level)
                 pygame.mixer.Sound.set_volume(kick, volume_level)
             if event.key == K_ESCAPE:
+                push_to_db()
+                get_sprinter()
+                delete_sprinter_score()
                 playing = False
+                
 
     
     bg_X1 -= bg_move
@@ -170,13 +205,14 @@ while playing:
     if keys[K_LEFT] and player_rect.left >= 0:
         player_rect = player_rect.move(player_speed_left)
 
-    if keys[K_ESCAPE]:
-        pygame.time.delay(3000)
 
     
-    if score == 25:
+    if score == 15:
+        push_to_db()
+        get_sprinter()
+        delete_sprinter_score()
         playing = False
-        pygame.mixer.music.stop()
+        #pygame.mixer.music.stop()
 
     for enemy in enemies:
         enemy[1] = enemy[1].move(enemy[2])
@@ -201,7 +237,11 @@ while playing:
                 pygame.mixer.music.stop()
                 main_display.fill((255,255,255))
                 show_level(loser, (0, 0, 0))
+                push_to_db()
+                get_sprinter()
+                delete_sprinter_score()
                 playing = False
+                
                 
                 
                 

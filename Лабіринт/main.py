@@ -1,6 +1,17 @@
 from typing import Any
 from pygame import  *
+import os, sys
+import sqlite3
+# Отримайте поточний шлях
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Додайте шлях до батьківської директорії до шляхів Python
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
+
+# Тепер ви можете імпортувати модуль
+#from db import request_for_DB # Замість "module" тут повинна бути назва вашого модулю
+from db import get_maze, delete_maze_score
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed):
@@ -59,6 +70,23 @@ class Wall(sprite.Sprite):
     def draw_wall(self):
         mw.blit(self.image,(self.rect.x, self.rect.y))
         
+# Надсилання промахів у DB
+def push_to_db():
+    first = []
+    first.append(touch)
+    data = first.copy()
+
+    int_element = data[0]
+
+    conn = sqlite3.connect('DB.db')
+
+        # cursor - працює з запитами у DB
+    cursor = conn.cursor()
+
+    cursor.execute('''INSERT INTO maze (score) VALUES (?)''', [int_element])
+
+    conn.commit()
+
 
 w_w, w_h = 700, 500
 mw = display.set_mode((w_w, w_h))
@@ -71,7 +99,6 @@ mixer.music.load('audio/for maze/jungles.ogg')
 mixer.music.play()
 kick = mixer.Sound('audio/for maze/kick.ogg')
 money = mixer.Sound('audio/for maze/money.ogg')
-
 
 
 font.init()
@@ -91,7 +118,7 @@ w6 = Wall((154, 205, 50), 300, 110, 10, 380)
 w7 = Wall((154, 205, 50), 390, 30, 10, 370)    
 w8 = Wall((154, 205, 50), 480, 110, 10, 370)            
         
-        
+touch = 0
 clock = time.Clock()
 FPS = 60
 game = True
@@ -100,6 +127,9 @@ finish = False
 while game:
     for e in event.get():
         if e.type == QUIT:
+            push_to_db()
+            get_maze()
+            delete_maze_score()
             game = False
 
     if not finish:    
@@ -132,17 +162,21 @@ while game:
             finish = True
             mw.blit(lose, (200, 200))
             kick.play()
+            touch += 1
 
         if sprite.collide_rect(player, treasure):
             finish = True
             mw.blit(win, (200, 200))
             money.play()
             time.wait(2000)
+            push_to_db()
+            get_maze()
+            delete_maze_score()
             game = False
 
     
     else:
-        time.delay(3000)
+        time.delay(1000)
         #player.rect.x = 5
         #player.rect.x = w_h - 80
         finish = False
