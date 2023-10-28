@@ -6,11 +6,13 @@ from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE
 from db import delete_catch_score
 #import tkinter as tk
 
+
 pygame.init()
 # Задання властивостей нашому додатку
 w = pygame.display.set_mode((500, 500))
 w.fill((230, 230, 250))
 clock = pygame.time.Clock()
+pygame.display.set_caption('Менеджер')
 
 
 # Клас поля
@@ -57,7 +59,7 @@ menu_settings = Picture('img/for menu/settings_button.png', 20, 20, 50, 50)
 
 # Створення об'єктів для меню настройок
 sett_info = Label(25, 50, 100, 150)
-sett_info.set_text('Щоб ознайомитися з грою, нажміть на значок "Файл" знизу праворуч.')
+sett_info.set_text('Щоб ознайомитися з документацією, нажміть на іконку "Файл" знизу.')
 sett_back = Picture('img/for menu/return_button.png', 230, 370, 50, 50)
 sett_documentary = Picture('img/for menu/documentary.png', 435, 430, 50, 50)
 

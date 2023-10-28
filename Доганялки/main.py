@@ -78,6 +78,7 @@ while playing:
             push_to_db()
             get_catch()
             delete_catch_score()
+            #restart_data()
             playing = False
             
 
@@ -131,6 +132,7 @@ while playing:
     if score == 10:
         push_to_db()
         get_catch()
+        #restart_data()
         delete_catch_score()
         playing = False
         

@@ -16,10 +16,14 @@ def clear_file(filename):
 # Приклад використання:
 filename = 'scores.txt'
 
+# List
+#records = []
 
 # Посилаємо - запит у DB
 def get_catch():
     cursor.execute('''SELECT MAX(score) FROM catch''')
+    
+
     catch = cursor.fetchall()
 
     try:
@@ -33,6 +37,7 @@ def get_catch():
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
                     file.write(f'\nCatch:\n{catch}, date: {today}\n')
+                    #lists.append('Catch:')
 
 
     except FileNotFoundError:
@@ -51,6 +56,7 @@ def delete_catch_score():
 
 def get_maze():
     cursor.execute('''SELECT MAX(score) FROM maze''')
+
     maze = cursor.fetchall()
 
     try:
@@ -64,6 +70,7 @@ def get_maze():
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
                     file.write(f'\nMaze:\n{maze}, date: {today}\n')
+                    #lists.append('Maze:')
 
     except FileNotFoundError:
         print('Файл не знайдено.')
@@ -78,6 +85,7 @@ def delete_maze_score():
 
 def get_sprinter():
     cursor.execute('''SELECT MAX(score) FROM sprinter''')
+
     sprinter = cursor.fetchall()
 
     try:
@@ -91,6 +99,7 @@ def get_sprinter():
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
                     file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
+                    #lists.append('Sprinter:')
 
     except FileNotFoundError:
         print('Файл не знайдено.')
@@ -102,6 +111,21 @@ def delete_sprinter_score():
         cursor.execute('''DELETE FROM sprinter
                         WHERE score < (SELECT MAX(score) FROM sprinter)''')
         conn.commit()
+
+
+#def restart_data():
+    #with open('scores.txt', 'r+') as file:
+    #    src = file.readlines()
+    #    file.seek(0)
+
+    #    for line in src:
+    #        if not any(record in line for record in records):
+    #            file.write(line)
+    #    file.truncate()
+    #file.write(f'\nCatch:\n{catch}, date: {today}\n')
+    #file.write(f'\nMaze:\n{maze}, date: {today}\n')
+    #file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
+    
 
 #def add_data():
     #file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
