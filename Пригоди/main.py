@@ -4,15 +4,11 @@ from typing import Any
 import random 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE, KEYDOWN, K_F2, K_F3
 import sqlite3
-# Отримайте поточний шлях
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Додайте шлях до батьківської директорії до шляхів Python
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
-# Тепер ви можете імпортувати модуль
-#from db import request_for_DB # Замість "module" тут повинна бути назва вашого модулю
 from db import get_sprinter, delete_sprinter_score
 
 pygame.init()
@@ -212,7 +208,6 @@ while playing:
         get_sprinter()
         delete_sprinter_score()
         playing = False
-        #pygame.mixer.music.stop()
 
     for enemy in enemies:
         enemy[1] = enemy[1].move(enemy[2])
@@ -243,9 +238,6 @@ while playing:
                 playing = False
                 
                 
-                
-                
-
             enemies.pop(enemies.index(enemy))
             
 

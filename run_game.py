@@ -13,7 +13,6 @@ clock = pygame.time.Clock()
 pygame.display.set_caption('Менеджер')
 
 
-
 # Клас поля
 class Area():
     def __init__(self, x=0, y=0, width=10, height=10, color=None):

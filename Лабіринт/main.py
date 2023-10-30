@@ -2,21 +2,17 @@ from typing import Any
 from pygame import  *
 import os, sys
 import sqlite3
-# Отримайте поточний шлях
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Додайте шлях до батьківської директорії до шляхів Python
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
-# Тепер ви можете імпортувати модуль
-#from db import request_for_DB # Замість "module" тут повинна бути назва вашого модулю
 from db import get_maze, delete_maze_score
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (65, 65))
+        self.image = transform.scale(image.load(player_image), (70, 70))
         self.speed = player_speed
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -36,9 +32,11 @@ class Player(GameSprite):
             self.rect.y += self.speed
 
         if keys[K_LEFT] and self.rect.x > 5:
+            self.image = transform.scale(image.load("img/for maze/catch31.png"), (70, 70))
             self.rect.x -= self.speed
 
         if keys[K_RIGHT] and self.rect.x < w_w-70:
+            self.image = transform.scale(image.load("img/for maze/catch32.png"), (70, 70))
             self.rect.x += self.speed
 
 
@@ -46,13 +44,14 @@ class Enemy(GameSprite):
     def update(self):
         if self.rect.x <= 485:
             self.direction = 'right'
-        if self.rect.x >= w_w-85:
+        if self.rect.x >= w_w-80:
             self.direction = 'left'
-
         if self.direction == 'right':
             self.rect.x += self.speed
+            self.image = transform.scale(image.load("img/for maze/monster1.png"), (70, 70))
         else:
             self.rect.x -= self.speed
+            self.image = transform.scale(image.load("img/for maze/monster2.png"), (70, 70))
 
 
 class Wall(sprite.Sprite):
@@ -91,7 +90,7 @@ def push_to_db():
 w_w, w_h = 700, 500
 mw = display.set_mode((w_w, w_h))
 display.set_caption("Лабіринт")
-background = transform.scale(image.load("img/for maze/background.jpg"),(w_w, w_h))
+background = transform.scale(image.load("img/for maze/background3.jpg"),(w_w, w_h))
 
 
 mixer.init()
@@ -106,8 +105,8 @@ text = font.Font(None, 70)
 win = text.render('YOU WIN!', 1, (255, 215, 0))
 lose = text.render('TRY MORE!', True, (180, 0, 0))
 
-player = Player("img/for maze/hero.png", 5, w_h - 80, 4)
-enemy = Enemy("img/for maze/cyborg.png", w_w - 80, 280, 2)
+player = Player("img/for maze/catch32.png", 5, w_h - 80, 4)
+enemy = Enemy("img/for maze/monster2.png", w_w - 80, 280, 2)
 treasure = GameSprite("img/for maze/treasure.png", w_w - 120, w_h - 80, 0)
 w1 = Wall((154, 205, 50), 100, 20, 450, 10)  
 w2 = Wall((154, 205, 50), 100, 480, 390, 10)
