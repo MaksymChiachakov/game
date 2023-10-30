@@ -84,7 +84,7 @@ def push_to_db():
 
     cursor = conn.cursor()
 
-    cursor.execute('''INSERT INTO sprinter (score) VALUES (?)''', [int_element])
+    cursor.execute('''INSERT INTO sprinter (score) VALUES (?)''', (int_element,))
 
     conn.commit()
 

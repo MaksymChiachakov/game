@@ -23,6 +23,9 @@ filename = 'scores.txt'
 def get_catch():
     cursor.execute('''SELECT MAX(score) FROM catch''')
     
+    cursor.execute('SELECT name FROM users WHERE id = (SELECT MAX(id) FROM users)')
+
+    player = cursor.fetchall()
 
     catch = cursor.fetchall()
 
@@ -36,8 +39,7 @@ def get_catch():
             else:
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
-                    file.write(f'\nCatch:\n{catch}, date: {today}\n')
-                    #lists.append('Catch:')
+                    file.write(f'\nGame: Catch\nPlayer: {player}\nScores: {catch}, \nDate: {today}\n')
 
 
     except FileNotFoundError:
@@ -57,6 +59,10 @@ def delete_catch_score():
 def get_maze():
     cursor.execute('''SELECT MAX(score) FROM maze''')
 
+    cursor.execute('SELECT name FROM users WHERE id = (SELECT MAX(id) FROM users)')
+
+    player = cursor.fetchall()
+
     maze = cursor.fetchall()
 
     try:
@@ -69,8 +75,7 @@ def get_maze():
             else:
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
-                    file.write(f'\nMaze:\n{maze}, date: {today}\n')
-                    #lists.append('Maze:')
+                    file.write(f'\nGame: Maze\nPlayer: {player}\nScores: {maze}, \nDate: {today}\n')
 
     except FileNotFoundError:
         print('Файл не знайдено.')
@@ -88,6 +93,10 @@ def get_sprinter():
 
     sprinter = cursor.fetchall()
 
+    cursor.execute('SELECT name FROM users WHERE id = (SELECT MAX(id) FROM users)')
+
+    player = cursor.fetchall()
+
     try:
         # Читаємо вміст файлу
         with open('scores.txt', 'r') as file:
@@ -98,8 +107,7 @@ def get_sprinter():
             else:
                 # Додаємо число до файлу
                 with open('scores.txt', 'a') as file:
-                    file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
-                    #lists.append('Sprinter:')
+                    file.write(f'\nGame: Sprinter\nPlayer: {player}\nScores: {sprinter}, \nDate: {today}\n')
 
     except FileNotFoundError:
         print('Файл не знайдено.')
@@ -113,22 +121,24 @@ def delete_sprinter_score():
         conn.commit()
 
 
-#def restart_data():
-    #with open('scores.txt', 'r+') as file:
-    #    src = file.readlines()
-    #    file.seek(0)
+def addNickname(name):
+    cursor.execute("""INSERT INTO users (name) VALUES (?)""", (name,))
+    conn.commit()
 
-    #    for line in src:
-    #        if not any(record in line for record in records):
-    #            file.write(line)
-    #    file.truncate()
-    #file.write(f'\nCatch:\n{catch}, date: {today}\n')
-    #file.write(f'\nMaze:\n{maze}, date: {today}\n')
-    #file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
+
+def TestNickname(name):
+    try:
+        cursor.execute("""SELECT name FROM users WHERE name = (?)""", (name,))
+        nick = cursor.fetchall()
+        conn.commit()
+        if nick == []:
+            return True
+        else:
+            return False
+    except:
+        print("Error while adding user")
     
-
-#def add_data():
-    #file.write(f'\nSprinter:\n{sprinter}, date: {today}\n')
+    
 
 # Виключаємо підключення до нашої DB, після цього, ми не зможемо надсилати запити 
 conn.commit()

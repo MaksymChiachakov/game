@@ -177,8 +177,6 @@ while game:
     
     else:
         time.delay(1000)
-        #player.rect.x = 5
-        #player.rect.x = w_h - 80
         finish = False
 
     display.update()   

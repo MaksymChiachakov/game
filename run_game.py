@@ -1,11 +1,9 @@
 import pygame 
-from pygame import font
 import subprocess, os
 import webbrowser 
 from pygame.constants import QUIT, K_DOWN, K_UP, K_RIGHT, K_LEFT, K_ESCAPE
-from db import delete_catch_score
-#import tkinter as tk
-
+import pyautogui as pg
+from db import addNickname, TestNickname
 
 pygame.init()
 # Задання властивостей нашому додатку
@@ -13,6 +11,7 @@ w = pygame.display.set_mode((500, 500))
 w.fill((230, 230, 250))
 clock = pygame.time.Clock()
 pygame.display.set_caption('Менеджер')
+
 
 
 # Клас поля
@@ -115,6 +114,18 @@ def run_game3():
         print(f"Файл '{game_file_path}' не знайдено.")
 
 
+# Получаємо нікнейм користувача
+while True:
+    pg.alert("Welcome", "You are ready?", button="Yeah!")
+    nickname = pg.prompt("Enter your nickname", "Your nickname")
+    if TestNickname(name=nickname) == True:
+        addNickname(name=nickname)
+        break
+    else:
+        pg.alert("This nickame is already use", "You will change?", button="Yes!")
+
+
+
 # Ігровий цикл з меню
 screen = 'menu'
 while True:
@@ -124,6 +135,7 @@ while True:
         menu_start.draw_picture()
         menu_settings.draw_picture()
         menu_exit.draw_picture()
+
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
